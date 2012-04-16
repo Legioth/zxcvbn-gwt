@@ -1,0 +1,6 @@
+.classpath
+.project
+.settings/
+gwt-unitCache/
+war/WEB-INF/
+war/org.vaadin.leif.zxcvbn.demo.ZxcvbnDemo/
