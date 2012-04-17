@@ -1,5 +1,6 @@
 package org.vaadin.leif.zxcvbn.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Node;
@@ -10,6 +11,8 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ZxcvbnIndicator extends Widget {
+    private static boolean cssLoaded = false;
+
     private int lastScore = 0;
 
     public ZxcvbnIndicator() {
@@ -61,4 +64,20 @@ public class ZxcvbnIndicator extends Widget {
                 "Estimated time to crack: " + result.getCrackTimeDisplay());
         setScore(score);
     }
+
+    public static void loadCss() {
+        if (!cssLoaded) {
+            cssLoaded = true;
+            addCssFile(GWT.getModuleBaseURL() + "zxcvbn.css");
+        }
+    }
+
+    private static native void addCssFile(String url) /*-{
+		var elem = $doc.createElement("link");
+		elem.setAttribute("rel", "stylesheet");
+		elem.setAttribute("type", "text/css");
+		elem.setAttribute("href", url);
+		$doc.getElementsByTagName("head")[0].appendChild(elem);
+    }-*/;
+
 }

@@ -19,6 +19,7 @@ public class ZxcvbnDemo implements EntryPoint {
     @Override
     public void onModuleLoad() {
         RootPanel root = RootPanel.get();
+        ZxcvbnIndicator.loadCss();
         zxcvbn.ensureLoaded();
 
         root.add(textBox);
