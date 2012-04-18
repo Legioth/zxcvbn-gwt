@@ -18,7 +18,6 @@ public class VZxcvbnIndicator extends ZxcvbnIndicator implements Paintable {
     private HandlerRegistration handlerRegistration;
 
     public VZxcvbnIndicator() {
-        loadCss();
         Zxcvbn.get().ensureLoaded();
     }
 

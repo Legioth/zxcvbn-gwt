@@ -9,6 +9,8 @@ import com.vaadin.ui.Window;
 public class ZxcvbnDemoApp extends Application {
     @Override
     public void init() {
+        setTheme("zxcvbn-demo");
+
         Window mainWindow = new Window("Zxcvbn demo");
         setMainWindow(mainWindow);
 
