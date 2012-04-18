@@ -4,3 +4,6 @@
 gwt-unitCache/
 war/WEB-INF/
 war/org.vaadin.leif.zxcvbn.demo.ZxcvbnDemo/
+war/org.vaadin.leif.zxcvbn.demo.vaadin.ZxcvbnDemoWidgetset/
+war/VAADIN/widgetsets
+
