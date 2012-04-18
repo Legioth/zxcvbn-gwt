@@ -9,6 +9,10 @@ import com.vaadin.terminal.gwt.client.UIDL;
 public class VZxcvbnIndicator extends ZxcvbnIndicator implements Paintable {
     public static final String TARGET_FIELD_ATTR = "field";
 
+    public static final String PASSWORD_VAR = "password";
+
+    public static final String SCORE_VAR = "score";
+
     private TextBoxBase boundTo;
 
     private ApplicationConnection client;
@@ -35,6 +39,16 @@ public class VZxcvbnIndicator extends ZxcvbnIndicator implements Paintable {
 
         bindTo((TextBoxBase) paintable);
 
+    }
+
+    @Override
+    public void showResult(ZxcvbnResult result) {
+        super.showResult(result);
+        int score = result.getScore();
+        String text = boundTo.getValue();
+
+        client.updateVariable(id, PASSWORD_VAR, text, false);
+        client.updateVariable(id, SCORE_VAR, score, false);
     }
 
     private void bindTo(TextBoxBase targetField) {
