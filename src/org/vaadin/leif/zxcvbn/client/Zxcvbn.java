@@ -68,7 +68,7 @@ public class Zxcvbn {
     }-*/;
 
     private static native boolean checkFunction() /*-{
-		if ($wnd.zxcvbn && typeof $wnd.zxcvvn == 'function') {
+		if ($wnd.zxcvbn && typeof $wnd.zxcvbn == 'function') {
 			return true;
 		} else {
 			return false;
