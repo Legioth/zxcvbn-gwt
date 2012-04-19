@@ -4,17 +4,18 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.vaadin.leif.zxcvbn.client.VZxcvbnIndicator;
+import org.vaadin.leif.zxcvbn.client.ZxcvbnRpc;
 
 import com.vaadin.terminal.PaintException;
 import com.vaadin.terminal.PaintTarget;
+import com.vaadin.terminal.Vaadin6Component;
 import com.vaadin.tools.ReflectTools;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractTextField;
-import com.vaadin.ui.ClientWidget;
 import com.vaadin.ui.Component;
 
-@ClientWidget(value = VZxcvbnIndicator.class)
-public class ZxcvbnIndicator extends AbstractComponent {
+public class ZxcvbnIndicator extends AbstractComponent implements
+        Vaadin6Component {
 
     private static final Method ZXCVBN_EVENT_METHOD = ReflectTools.findMethod(
             ZxcvbnChangeListener.class, "onZxcvbnChange",
@@ -39,6 +40,15 @@ public class ZxcvbnIndicator extends AbstractComponent {
     private String password;
     private int passwordScore;
 
+    public ZxcvbnIndicator() {
+        registerRpc(new ZxcvbnRpc() {
+            @Override
+            public void setRating(String password, int score) {
+                doSetRating(password, score);
+            }
+        });
+    }
+
     public void setTargetField(AbstractTextField targetField) {
         this.targetField = targetField;
         requestRepaint();
@@ -56,24 +66,21 @@ public class ZxcvbnIndicator extends AbstractComponent {
 
     @Override
     public void changeVariables(Object source, Map<String, Object> variables) {
+
+    }
+
+    private void doSetRating(String password, int score) {
         boolean fireEvent = false;
-
-        String password = (String) variables.get(VZxcvbnIndicator.PASSWORD_VAR);
-
         // Never fire event for null password
         if (password != null && !password.equals(this.password)) {
             fireEvent = true;
             this.password = password;
         }
 
-        Integer score = (Integer) variables.get(VZxcvbnIndicator.SCORE_VAR);
-        if (score != null) {
-            int newScore = score.intValue();
-            if (!fireEvent && newScore != passwordScore) {
-                fireEvent = true;
-            }
-            passwordScore = newScore;
+        if (!fireEvent && score != passwordScore) {
+            fireEvent = true;
         }
+        passwordScore = score;
 
         if (fireEvent) {
             fireEvent(new ZxcvbnChangeEvent(this));

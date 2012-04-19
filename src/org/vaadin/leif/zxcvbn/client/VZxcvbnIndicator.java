@@ -3,8 +3,10 @@ package org.vaadin.leif.zxcvbn.client;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.vaadin.terminal.gwt.client.ApplicationConnection;
+import com.vaadin.terminal.gwt.client.ComponentConnector;
 import com.vaadin.terminal.gwt.client.Paintable;
 import com.vaadin.terminal.gwt.client.UIDL;
+import com.vaadin.terminal.gwt.client.communication.MethodInvocation;
 
 public class VZxcvbnIndicator extends ZxcvbnIndicator implements Paintable {
     public static final String TARGET_FIELD_ATTR = "field";
@@ -21,6 +23,21 @@ public class VZxcvbnIndicator extends ZxcvbnIndicator implements Paintable {
 
     private HandlerRegistration handlerRegistration;
 
+    private class LazyMethodInvocation extends MethodInvocation {
+        public LazyMethodInvocation() {
+            super(id, "org.vaadin.leif.zxcvbn.client.ZxcvbnRpc", "setRating",
+                    new Object[2]);
+        }
+
+        @Override
+        public String getInterfaceName() {
+            lazyMethodInvocation = null;
+            return super.getInterfaceName();
+        }
+    }
+
+    private LazyMethodInvocation lazyMethodInvocation = null;
+
     public VZxcvbnIndicator() {
         Zxcvbn.get().ensureLoaded();
     }
@@ -34,10 +51,10 @@ public class VZxcvbnIndicator extends ZxcvbnIndicator implements Paintable {
             return;
         }
 
-        Paintable paintable = uidl.getPaintableAttribute(TARGET_FIELD_ATTR,
-                client);
+        ComponentConnector paintable = (ComponentConnector) uidl
+                .getPaintableAttribute(TARGET_FIELD_ATTR, client);
 
-        bindTo((TextBoxBase) paintable);
+        bindTo((TextBoxBase) paintable.getWidget());
 
     }
 
@@ -47,8 +64,13 @@ public class VZxcvbnIndicator extends ZxcvbnIndicator implements Paintable {
         int score = result.getScore();
         String text = boundTo.getValue();
 
-        client.updateVariable(id, PASSWORD_VAR, text, false);
-        client.updateVariable(id, SCORE_VAR, score, false);
+        if (lazyMethodInvocation == null) {
+            lazyMethodInvocation = new LazyMethodInvocation();
+            client.addMethodInvocationToQueue(lazyMethodInvocation, false);
+        }
+        Object[] parameters = lazyMethodInvocation.getParameters();
+        parameters[0] = text;
+        parameters[1] = Integer.valueOf(score);
     }
 
     private void bindTo(TextBoxBase targetField) {
