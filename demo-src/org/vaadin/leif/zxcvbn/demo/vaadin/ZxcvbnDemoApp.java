@@ -6,16 +6,17 @@ import org.vaadin.leif.zxcvbn.ZxcvbnIndicator.ZxcvbnChangeListener;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.terminal.WrappedRequest;
-import com.vaadin.ui.Root;
+import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 
 @Theme("zxcvbn-demo")
 @Widgetset("org.vaadin.leif.zxcvbn.demo.vaadin.ZxcvbnDemoWidgetset")
-public class ZxcvbnDemoApp extends Root {
+public class ZxcvbnDemoApp extends UI {
     @Override
-    protected void init(WrappedRequest request) {
-        setCaption("Zxcvbn demo");
+    protected void init(VaadinRequest request) {
+        getPage().setTitle("Zxcvbn demo");
 
         TextField textField = new TextField("Sample field");
         textField.setImmediate(true);
@@ -31,8 +32,12 @@ public class ZxcvbnDemoApp extends Root {
             }
         });
 
-        addComponent(textField);
-        addComponent(zxcvbnIndicator);
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+        setContent(layout);
+
+        layout.addComponent(textField);
+        layout.addComponent(zxcvbnIndicator);
     }
 
 }

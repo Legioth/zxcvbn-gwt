@@ -1,21 +1,20 @@
 package org.vaadin.leif.zxcvbn;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 
-import org.vaadin.leif.zxcvbn.client.VZxcvbnIndicator;
 import org.vaadin.leif.zxcvbn.client.ZxcvbnRpc;
+import org.vaadin.leif.zxcvbn.client.ZxcvbnState;
 
-import com.vaadin.terminal.PaintException;
-import com.vaadin.terminal.PaintTarget;
-import com.vaadin.terminal.Vaadin6Component;
-import com.vaadin.tools.ReflectTools;
+import com.vaadin.annotations.JavaScript;
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
+import com.vaadin.util.ReflectTools;
 
-public class ZxcvbnIndicator extends AbstractComponent implements
-        Vaadin6Component {
+@JavaScript("public/zxcvbn.js")
+@StyleSheet("public/zxcvbn.css")
+public class ZxcvbnIndicator extends AbstractComponent {
 
     private static final Method ZXCVBN_EVENT_METHOD = ReflectTools.findMethod(
             ZxcvbnChangeListener.class, "onZxcvbnChange",
@@ -36,7 +35,6 @@ public class ZxcvbnIndicator extends AbstractComponent implements
         public void onZxcvbnChange(ZxcvbnChangeEvent event);
     }
 
-    private AbstractTextField targetField;
     private String password;
     private int passwordScore;
 
@@ -50,23 +48,16 @@ public class ZxcvbnIndicator extends AbstractComponent implements
     }
 
     public void setTargetField(AbstractTextField targetField) {
-        this.targetField = targetField;
-        requestRepaint();
+        getState().targetField = targetField;
     }
 
     public AbstractTextField getTargetField() {
-        return targetField;
+        return (AbstractTextField) getState().targetField;
     }
 
     @Override
-    public void paintContent(PaintTarget target) throws PaintException {
-        target.addAttribute(VZxcvbnIndicator.TARGET_FIELD_ATTR,
-                getTargetField());
-    }
-
-    @Override
-    public void changeVariables(Object source, Map<String, Object> variables) {
-
+    protected ZxcvbnState getState() {
+        return (ZxcvbnState) super.getState();
     }
 
     private void doSetRating(String password, int score) {
