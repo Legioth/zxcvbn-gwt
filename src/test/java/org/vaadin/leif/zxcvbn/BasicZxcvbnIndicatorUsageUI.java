@@ -1,21 +1,22 @@
-package org.vaadin.leif.zxcvbn.demo.vaadin;
+package org.vaadin.leif.zxcvbn;
 
-import org.vaadin.leif.zxcvbn.ZxcvbnIndicator;
+import org.vaadin.addonhelpers.AbstractTest;
 import org.vaadin.leif.zxcvbn.ZxcvbnIndicator.ZxcvbnChangeEvent;
 import org.vaadin.leif.zxcvbn.ZxcvbnIndicator.ZxcvbnChangeListener;
 
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-@Theme("zxcvbn-demo")
-@Widgetset("org.vaadin.leif.zxcvbn.demo.vaadin.ZxcvbnDemoWidgetset")
-public class ZxcvbnDemoApp extends UI {
+/**
+ * Add many of these with different configurations, combine with different
+ * components, for regressions and also make them dynamic if needed.
+ */
+public class BasicZxcvbnIndicatorUsageUI extends AbstractTest {
+
     @Override
-    protected void init(VaadinRequest request) {
+    public Component getTestComponent() {
         getPage().setTitle("Zxcvbn demo");
 
         TextField textField = new TextField("Sample field");
@@ -38,6 +39,16 @@ public class ZxcvbnDemoApp extends UI {
 
         layout.addComponent(textField);
         layout.addComponent(zxcvbnIndicator);
+
+        return layout;
+    }
+
+    @Override
+    protected void init(VaadinRequest request) {
+        super.init(request);
+
+        // Bug in AbstractTest?
+        setContent(content);
     }
 
 }
