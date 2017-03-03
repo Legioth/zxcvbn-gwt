@@ -20,7 +20,6 @@ public class BasicZxcvbnIndicatorUsageUI extends AbstractTest {
         getPage().setTitle("Zxcvbn demo");
 
         TextField textField = new TextField("Sample field");
-        textField.setImmediate(true);
 
         ZxcvbnIndicator zxcvbnIndicator = new ZxcvbnIndicator();
         zxcvbnIndicator.setTargetField(textField);
