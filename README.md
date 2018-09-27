@@ -1,3 +1,6 @@
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/stylename-finder)
+[![Stars on Vaadin Directory](https://img.shields.io/vaadin-directory/star/stylename-finder.svg)](https://vaadin.com/directory/component/stylename-finder)
+
 # zxcvbn
 
 This is a Vaadin add-on project created with in.virit:vaadin-gwt-addon archetype.
